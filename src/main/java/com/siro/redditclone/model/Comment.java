@@ -1,24 +1,26 @@
 package com.siro.redditclone.model;
 
-import java.util.Objects;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-import org.springframework.data.annotation.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Comment{
+public class Comment extends Audit {
 	@Id
 	@GeneratedValue
 	private Long id;
 	private String comment;
-	private Long link_id;
-	
+	@ManyToOne
+	@JsonIgnore
+	private Link link;
+
 	public Comment() {
 		super();
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -35,37 +37,54 @@ public class Comment{
 		this.comment = comment;
 	}
 
-	public Long getLink_id() {
-		return link_id;
-	}
-	
-	public void setLink_id(Long link_id) {
-		this.link_id = link_id;
+	public Link getLink() {
+		return link;
 	}
 
-	
-	
+	public void setLink(Link link) {
+		this.link = link;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(comment, id, link_id);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((link == null) ? 0 : link.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (!(obj instanceof Comment)) {
+		if (obj == null)
 			return false;
-		}
+		if (getClass() != obj.getClass())
+			return false;
 		Comment other = (Comment) obj;
-		return Objects.equals(comment, other.comment) && Objects.equals(id, other.id)
-				&& Objects.equals(link_id, other.link_id);
+		if (comment == null) {
+			if (other.comment != null)
+				return false;
+		} else if (!comment.equals(other.comment))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (link == null) {
+			if (other.link != null)
+				return false;
+		} else if (!link.equals(other.link))
+			return false;
+		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Comment [id=" + id + ", comment=" + comment + ", link_id=" + link_id + "]";
+		return "Comment [id=" + id + ", comment=" + comment + "]";
 	}
 
 }
